@@ -7,4 +7,5 @@ app_name = 'stations'
 urlpatterns = [
 
     path('', views_v1.LocationView.as_view(), name='v1_list_create_location'),
+
 ]
