@@ -5,6 +5,10 @@ from apps.stations.models import StationModel
 
 from apps.utils import create_id
 
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 class LineModel(models.Model):
 
@@ -22,3 +26,10 @@ class RouteModel(models.Model):
     stations = models.ManyToManyField(StationModel)
     direction = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
+
+
+# Crear un token automaticamente cuando se guarde un usuario y asociarlo.
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
