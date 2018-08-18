@@ -12,3 +12,9 @@ class LocationFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('slug')
     latitude = factory.Faker('latitude')
     longitude = factory.Faker('longitude')
+
+    #---Para que se cumpla el unique ----
+
+    @factory.sequence
+    def id(n):
+        return n
