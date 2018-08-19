@@ -37,12 +37,17 @@ class ListAPIView(ListModelMixin, GenericAPIView):
 class UpdateApiView(UpdateModelMixin, GenericAPIView):
     authentication_classes = (CustomTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    pagination_class = PaginationResponse
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
 
     # def put(self, request, *args, **kwargs):
     #     return self.create(request, *args, **kwargs)
 
-    # def patch(self, request, *args, **kwargs):
-    #     return self.create(request, *args, **kwargs)
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
     # def create(self, request, *args, **kwargs):
     #     return self.create(request, *args, **kwargs)
@@ -51,4 +56,7 @@ class ListCreateView(CreateAPIView, ListAPIView):
     pass
 
 class ListUpdateView(UpdateApiView, ListAPIView):
+    pass
+
+class ListView(ListAPIView):
     pass
