@@ -15,6 +15,9 @@ class LocationFactory(factory.django.DjangoModelFactory):
 
     #---Para que se cumpla el unique ----
 
-    @factory.sequence
-    def id(n):
-        return n
+    # @factory.sequence
+    # def id(n):
+    #     return n
+
+
+

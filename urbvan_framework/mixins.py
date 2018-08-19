@@ -49,3 +49,35 @@ class ListModelMixin(object):
         schema = schema.dump(page).data
 
         return self.get_paginated_response(schema)
+
+
+class UpdateModelMixin(mixins.UpdateModelMixin):
+
+    def put(self, request, *args, **kwargs):
+
+        serializer = self.get_serializer(data=request.data)
+
+        if not serializer.is_valid():
+            response = render_response_error(errors=serializer.errors)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            #self.perform_create(serializer)
+            self.perform_update(serializer)
+        except Exception as e:
+            if hasattr(e, 'detail'):
+                error = e.detail
+            else:
+                error = {"base": {"message": str(e)}}
+
+            response = render_response_error(errors=error)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+        instance = serializer.instance
+
+        schema = self.schema_class()
+        schema = schema.dump(instance).data
+
+        response = render_to_response(body=schema)
+
+        return Response(response, status=status.HTTP_202_ACCEPTED)
