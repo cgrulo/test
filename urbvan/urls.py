@@ -13,5 +13,5 @@ urlpatterns = [
     # path('locations/', LocationView.as_view()),
     # path('locations/<id>/', LocationCrudView.as_view()),
     #path('v1/locations/', include('apps.stations.urls')),
-    path('locations/', include('apps.stations.urls')),
+    path('v1/api/', include('apps.stations.urls', namespace='api')),
 ]

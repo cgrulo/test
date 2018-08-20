@@ -1,8 +1,8 @@
 # coding: utf8
 from rest_framework import serializers
 
-from apps.stations.models import LocationModel
-from apps.stations.models import Profile
+from ..models import LocationModel, StationModel
+from apps.users.models import Profile
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -42,15 +42,27 @@ class LocationSerializerDelete(serializers.ModelSerializer):
             'name',
         )
 
-    def validate_id(self, value):
+    # def validate_id(self, value):
+    #
+    #     request = self.context.get("request")
+    #     user = request.user
+    #     profiles = Profile.objects.filter(user__id=user.id)
+    #     for profile in profiles:
+    #         tipo = profile.tipo
+    #
+    #     if tipo == 'usuario':
+    #         raise serializers.ValidationError('No tiene los permisos')
+    #     else:
+    #         return value
 
-        request = self.context.get("request")
-        user = request.user
-        profiles = Profile.objects.filter(user__id=user.id)
-        for profile in profiles:
-            tipo = profile.tipo
+class StationsListCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StationModel
+        exclude = ('id',)
 
-        if tipo == 'usuario':
-            raise serializers.ValidationError('No tiene los permisos')
-        else:
-            return value
+
+
+class StationsUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StationModel
+        fields = '__all__'

@@ -1,18 +1,20 @@
 # coding: utf8
 from urbvan_framework.views import ListCreateView, ListUpdateView, ListView
-from .schemas import LocationSchema
+from .schemas import LocationSchema, StationSchema
 from .serializers import LocationSerializer, LocationSerializerUpdate, LocationSerializerDelete
-from ..models import LocationModel
+from .serializers import StationsListCreateSerializer, StationsUpdateSerializer
+from ..models import LocationModel, StationModel
 from rest_framework import generics, mixins
 from urbvan_framework.authentication import CustomTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from apps.stations.models import Profile
-from rest_framework import status
-from rest_framework.response import Response
+
+# from rest_framework import status
+# from rest_framework.response import Response
 
 
 class LocationCrudView(ListUpdateView):
     lookup_field = 'id'
+    ordering = ['-id']
     queryset = LocationModel.objects.all()
     # schema_class = LocationSchema
     serializer_class = LocationSerializerUpdate
@@ -22,9 +24,11 @@ class LocationView(ListCreateView):
     queryset = LocationModel.objects.all()
     schema_class = LocationSchema
     serializer_class = LocationSerializer
+    ordering = ['-id']
 
 class LocationDelete(generics.DestroyAPIView):
     lookup_field = 'id'
+    ordering = ['-id']
     authentication_classes = (CustomTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = LocationModel.objects.all()
@@ -50,24 +54,27 @@ class LocationDelete(generics.DestroyAPIView):
     #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class StationsListCreateView(ListCreateView):
+
+    queryset = StationModel.objects.all()
+    ordering = ['-id']
+    schema_class = StationSchema
+    serializer_class = StationsListCreateSerializer
 
 
-# class LocationCrudView(ListUpdateView):
-#
-#     #lookup_field = 'id'
-#     authentication_classes = (CustomTokenAuthentication,)
-#     permission_classes = (IsAuthenticated,)
-#     serializer_class = LocationSerializerUpdate
-#     schema_class = LocationSchema
-#
-#     def perform_create(self, serializer):
-#         current_user = self.request.user
-#         serializer.save(user=current_user)
-#
-#
-#     def get_queryset(self):
-#         return LocationModel.objects.all()
-#
-#     def get_serializer_context(self):
-#         return{'request': self.request}
 
+
+class StationsUpdateView(generics.RetrieveUpdateAPIView):
+    lookup_field = 'id'
+    ordering = ['-id']
+    authentication_classes = (CustomTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = StationModel.objects.all()
+    serializer_class = StationsUpdateSerializer
+
+class StationsDeleteView(generics.RetrieveUpdateAPIView):
+    lookup_field = 'id'
+    ordering = ['-id']
+    authentication_classes = (CustomTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = StationModel.objects.all()

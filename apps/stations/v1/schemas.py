@@ -25,4 +25,9 @@ class LocationSchema(Schema):
         else:
             return data
 
+class StationSchema(Schema):
 
+    id = fields.String()
+    location = fields.Nested(LocationSchema)
+    order = fields.Integer()
+    is_active = fields.Boolean()
