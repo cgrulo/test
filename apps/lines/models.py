@@ -12,20 +12,34 @@ from rest_framework.authtoken.models import Token
 
 class LineModel(models.Model):
 
-    id = models.CharField(default=create_id('line_'), primary_key=True,
+    id = models.CharField(default=' ', primary_key=True,
                           max_length=30, unique=True)
     name = models.CharField(max_length=100)
     color = models.CharField(max_length=8)
 
+    def __str__(self):
+        return self.id
+
+    def save(self, *args, **kwargs):
+        exists = LineModel.objects.filter(id=self.id).exists()
+        if not exists:
+            self.id = create_id('line_')
+        super(LineModel, self).save(*args, **kwargs)
 
 class RouteModel(models.Model):
 
-    id = models.CharField(default=create_id('route_'), primary_key=True,
+    id = models.CharField(default=' ', primary_key=True,
                           max_length=30, unique=True)
     line = models.ForeignKey(LineModel, on_delete=models.DO_NOTHING)
     stations = models.ManyToManyField(StationModel)
     direction = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        exists = RouteModel.objects.filter(id=self.id).exists()
+        if not exists:
+            self.id = create_id('route_')
+        super(RouteModel, self).save(*args, **kwargs)
 
 
 # Crear un token automaticamente cuando se guarde un usuario y asociarlo.
@@ -33,3 +47,5 @@ class RouteModel(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+

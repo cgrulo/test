@@ -21,11 +21,11 @@ class LocationCrudView(ListUpdateView):
     serializer_class = LocationSerializerUpdate
 
 class LocationView(ListCreateView):
-
+    ordering = ['-id']
     queryset = LocationModel.objects.all()
     schema_class = LocationSchema
     serializer_class = LocationSerializer
-    ordering = ['-id']
+
 
 class LocationDelete(generics.DestroyAPIView):
     lookup_field = 'id'
@@ -78,7 +78,7 @@ class StationsUpdateView(generics.RetrieveUpdateAPIView):
     queryset = StationModel.objects.all()
     serializer_class = StationsUpdateSerializer
 
-class StationsDeleteView(generics.RetrieveUpdateAPIView):
+class StationsDeleteView(generics.DestroyAPIView):
     lookup_field = 'id'
     ordering = ['-id']
     authentication_classes = (CustomTokenAuthentication,)

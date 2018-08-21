@@ -11,6 +11,18 @@ class LocationSerializer(serializers.ModelSerializer):
         model = LocationModel
         exclude = ('id', )
 
+    def validate_name(self, value):
+        request = self.context.get("request")
+        user = request.user
+        profiles = Profile.objects.filter(user__id=user.id)
+        for profile in profiles:
+            tipo = profile.tipo
+
+        if tipo =='usuario' or tipo == 'urbvan':
+            raise serializers.ValidationError('No tiene los permisos')
+        else:
+            return value
+
 
 
 

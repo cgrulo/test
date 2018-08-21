@@ -18,7 +18,7 @@ class LocationModel(models.Model):
             geometry -- Similar to coordinate but using with postgis
     """
 
-    id = models.CharField(default=create_id('loc_'), primary_key=True,
+    id = models.CharField(default=' ', primary_key=True,
                           max_length=30, unique=True)
     name = models.CharField(max_length=100)
     latitude = models.DecimalField(max_digits=19, decimal_places=16)
@@ -34,3 +34,9 @@ class LocationModel(models.Model):
         for profile in profiles:
             tipo = profile.tipo
         return tipo
+
+    def save(self, *args, **kwargs):
+        exists = LocationModel.objects.filter(id=self.id).exists()
+        if not exists:
+            self.id = create_id('loc_')
+        super(LocationModel, self).save(*args, **kwargs)
