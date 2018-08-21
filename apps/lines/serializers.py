@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import  LineModel, StationModel
+from .models import  LineModel, RouteModel
 from apps.users.models import Profile
 from apps.stations.v1.serializers import StationsUpdateSerializer
 class LineCreateSerializer(serializers.ModelSerializer):
@@ -43,10 +43,9 @@ class LineUpdateSerializer(serializers.ModelSerializer):
 
 class RouteCreateSerializer(serializers.ModelSerializer, serializers.Serializer):
     class Meta:
-        model = StationModel
-        exclude = (
-            'id',
-        )
+        model = RouteModel
+        fields = '__all__'
+        read_only_fields = ['id', ]
         stations = StationsUpdateSerializer()
 
     def validate_direction(self, value):
@@ -63,7 +62,7 @@ class RouteCreateSerializer(serializers.ModelSerializer, serializers.Serializer)
 
 class RouteUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StationModel
+        model = RouteModel
         fields = '__all__'
         read_only_fields = ['id', ]
         stations = StationsUpdateSerializer()

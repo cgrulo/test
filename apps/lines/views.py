@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from urbvan_framework.authentication import CustomTokenAuthentication
-from urbvan_framework.views import ListCreateView
+from urbvan_framework.views import ListCreateView, UpdateApiView
 from .models import LineModel, RouteModel
 from .serializers import LineCreateSerializer,LineUpdateSerializer, RouteCreateSerializer, RouteUpdateSerializer
 from .schemas import LinecreateSchema, RouteCreateSchema
@@ -40,7 +40,7 @@ class LineModelDeleteView(generics.DestroyAPIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = LineModel.objects.all()
 
-class RouteModelCreateView(ListCreateView):
+class RouteModelCreateView(generics.ListCreateAPIView):
 
     lookup_field = 'id'
     ordering = ['-id']
@@ -50,7 +50,7 @@ class RouteModelCreateView(ListCreateView):
     serializer_class = RouteCreateSerializer
     schema_class = RouteCreateSchema
 
-class RouteModelUpdateView(generics.RetrieveUpdateAPIView):
+class RouteModelUpdateView(UpdateApiView):
 
     lookup_field = 'id'
     ordering = ['-id']

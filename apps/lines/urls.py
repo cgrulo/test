@@ -10,6 +10,6 @@ urlpatterns = [
     path('lines/delete/<id>/', LineModelDeleteView.as_view(), name='lines_delete'),
     path('routes/', RouteModelCreateView.as_view(), name='routes_create'),
     path('routes/update/<id>/', RouteModelUpdateView.as_view(), name='routes_update'),
-    path('routes/delete/<id>', RouteModelDeleteView.as_view(), name='routes_delete'),
+    path('routes/delete/<id>/', RouteModelDeleteView.as_view(), name='routes_delete'),
 
 ]
