@@ -6,11 +6,12 @@ from .serializers import StationsListCreateSerializer, StationsUpdateSerializer
 from ..models import LocationModel, StationModel
 from rest_framework import generics, mixins
 from urbvan_framework.authentication import CustomTokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 # from rest_framework import status
 # from rest_framework.response import Response
 
+#--- ordering se usa para ordenar los datos.
 
 class LocationCrudView(ListUpdateView):
     lookup_field = 'id'
@@ -30,9 +31,12 @@ class LocationDelete(generics.DestroyAPIView):
     lookup_field = 'id'
     ordering = ['-id']
     authentication_classes = (CustomTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = LocationModel.objects.all()
     serializer_class = LocationSerializerDelete
+
+    #---- Se intento sobrecargar el metodo destroy para hacer la validacion----
+
 
     # def perform_destroy(self, instance):
 
@@ -55,16 +59,18 @@ class LocationDelete(generics.DestroyAPIView):
 
 
 class StationsListCreateView(ListCreateView):
-
+    #--- Se uso la vista dentro de urbvan_framework ----
     queryset = StationModel.objects.all()
     ordering = ['-id']
     schema_class = StationSchema
     serializer_class = StationsListCreateSerializer
 
 
-
+#Se usaron vistas genericas para la creacion de las otras views para station
 
 class StationsUpdateView(generics.RetrieveUpdateAPIView):
+
+
     lookup_field = 'id'
     ordering = ['-id']
     authentication_classes = (CustomTokenAuthentication,)
@@ -76,5 +82,5 @@ class StationsDeleteView(generics.RetrieveUpdateAPIView):
     lookup_field = 'id'
     ordering = ['-id']
     authentication_classes = (CustomTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = StationModel.objects.all()

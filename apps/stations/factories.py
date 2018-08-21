@@ -14,6 +14,8 @@ class LocationFactory(factory.django.DjangoModelFactory):
     latitude = factory.Faker('latitude')
     longitude = factory.Faker('longitude')
 
+#Al tener un campo con foreign key se debe crear el objeto al que se va a asociar,
+# en este caso se crea en el test y se inicializa la apuntando al nuevo objeto creado
 
 class StationFactory(factory.django.DjangoModelFactory):
 

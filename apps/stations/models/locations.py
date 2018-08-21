@@ -3,8 +3,7 @@ from django.db import models
 
 from apps.utils import create_id
 from apps.users.models import Profile
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+
 
 
 
@@ -35,7 +34,3 @@ class LocationModel(models.Model):
         for profile in profiles:
             tipo = profile.tipo
         return tipo
-
-    # def save(self, *args, **kwargs):
-    #     self.id = create_id('loc_')
-    #     super(LocationModel, self).save(*args, **kwargs)
